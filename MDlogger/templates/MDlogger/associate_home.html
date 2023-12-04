@@ -1,0 +1,173 @@
+{% extends 'MDlogger/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<style>
+
+    #daily-repairs {
+        text-align: center;
+        font-weight: bold;
+        color: black;
+        margin-bottom: 10px;
+    }
+
+    #addrepair {
+        display: inline-block;
+        padding: 10px 20px; /* Adjust padding for better appearance */
+        margin-top: 20px;
+        font-weight: bold;
+        background-color: rgb(59, 79, 232);
+        border: none;
+        border-radius: 25px;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    #addrepair:hover {
+        background-color: rgb(49, 69, 212); /* Darker color on hover */
+        box-shadow: 0 0 5px rgba(44, 6, 255, 0.5);
+    }
+
+    .repaircontainer {
+       
+        background-color: #1d2a47;
+        width:30%;
+        max-width: 320px;        position: fixed;
+        top: 68px; /* Adjust this value based on your navbar height */
+        left: 0;
+        background-color: #dce0e8;
+        height: 90%;
+        bottom: 10px;
+        text-align: center;
+        box-sizing: border-box;
+        align-items: center;
+        justify-content: center;
+        box-shadow: #888888 2px 0px 12px 0px; 
+        border-top: 2px solid #1e2026;
+        border-right: 2px solid #1e2026;
+        padding-bottom: 5px;
+        border-bottom: 2px solid #1e2026;
+        padding-top: 10px;
+    }
+
+    .repaired-box {
+        border: 2px solid #1b1919;
+        border-radius: 10px;
+        margin: 0 auto 20px;
+        padding: 15px;
+        background-color: #0d559e;
+        width: 80%;
+        box-shadow: 1px 1px 10px 1px #888888;
+        
+    }
+
+    .repaired-box-container {
+        overflow-y: scroll;
+        height: 80%;
+    }
+
+    .repair-lp {
+        font-weight: bold;
+       font-size: small;
+        color: white;
+    }
+
+    .repair-sku {
+        font-weight: bold;
+        font-size: medium;
+        color: white;
+    }
+
+    .repair-repair {
+        font-weight: bold;
+        font-size: medium;
+        color: white;
+    }
+
+    .repair-time {
+        font-weight: bold;
+        font-size: medium;
+        color: white;
+    }
+
+    #addrepaircontainer {
+        position: absolute; /* Position the container absolutely */
+        bottom: 25px; /* Adjust this value as needed */
+        width: 100%; /* Make it span the entire width of .repaircontainer */
+        border-top: 1px solid #c1c1c1;
+    }
+
+    .graphs-container {
+        display: flex;
+        justify-content: space-evenly;
+        margin-top: 10px;
+    }
+
+    .graphs {
+        width: 45%;
+    }
+    
+    body {
+        background-color: aliceblue;  
+        margin: 0;
+    }
+
+</style>
+
+<div class="repaircontainer">
+    <h3 id="daily-repairs">Repaired Today: {{ pieces_repaired_today }} </h3>
+    <div class="repaired-box-container">
+        {% for repair in repairs %}
+        <div class="repaired-box">
+        <div class = "repair-lp">LP: {{ repair.lp }}</div>
+        <div class = "repair-sku">SKU: {{ repair.sku }}</div>
+        <div class = "repair-repair">Repaired: {{ repair.repair }}</div>
+        <div class = "repair-time">Time: {{ repair.time }}</div>
+        </div>
+        {% endfor %}
+    </div>
+<div id="addrepaircontainer">
+<a id="addrepair" href="{% url 'MDlogger:lp_entry' %}">Add New Repair</a>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="graphs-container">
+<div class="graphs">
+<canvas id="repairDoughnutChart" width="300" height="300"></canvas>
+</div>
+</div>
+
+<script>
+var piecesRepaired = {{ pieces_repaired_today }}; // Replace with the actual number of pieces repaired
+var piecesRemaining = 4; // Replace with the actual number of pieces remaining
+
+var piecesToRepair = 14;
+var piecesLeftToRepair = piecesToRepair - piecesRepaired;
+
+var doughnutData = {
+  labels: ['Repaired', 'Remaining'],
+  datasets: [{
+    data: [piecesRepaired, piecesLeftToRepair],
+    backgroundColor: ['#27d98c', '#220a8f'],
+  }],
+};
+
+var doughnutOptions = {
+  cutout: '60%',
+  responsive: true,
+  maintainAspectRatio: false,
+};
+
+var doughnutChartCanvas = document.getElementById('repairDoughnutChart').getContext('2d');
+new Chart(doughnutChartCanvas, {
+  type: 'doughnut',
+  data: doughnutData,
+  options: doughnutOptions,
+});
+</script>
+{% endblock %}

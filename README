@@ -1,0 +1,49 @@
+Major Damaage system
+
+Used by Major Damage associates to save repairs and view information
+
+Used by Team Leader and Management to track associate performance
+
+Includes:
+- Login system
+- User management
+
+index.html
+- login page
+- user can not access any other page without being authenticated
+- redirect to home.html
+
+home.html
+- landing page after authentication
+- "successfully logged in"
+- Buttons to naigate page
+
+associate_home.html
+- associate landing page to view daily repairs and time
+- enter an LP to add the peice to check if it has already been saved
+- redirect to the Repair form "add_repair.html"
+- acessible to all authenticated users
+
+add_repair.html
+- display the current SKU and LP
+- link to the CFE imaging
+- select damages
+- submit
+- saved confirmation and redirect to associate_home.html 
+- acessible to all authenticated users
+
+metrics.html
+- view associate metrics
+- view overall metrics
+- only accessible to TL/Management
+
+repairs.html
+- repairs from last 3 months in tabular format
+- can be sorted by each catergory 
+- can search by SKU or LP
+- Button to export as .xlsx
+- only accessible to TL/Management
+
+base.html
+- contains Nav bar
+

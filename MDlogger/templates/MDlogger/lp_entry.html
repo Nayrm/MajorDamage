@@ -1,0 +1,140 @@
+{% extends 'MDlogger/base.html' %}
+
+{% block content %}
+<style>
+    /* Additional styles for the LP entry form */
+    .lp-entry-form {
+        max-width: 400px; /* Set a max width for the form */
+        margin: 0 auto; /* Center the form horizontally */
+        padding: 35px;
+        border-radius: 25px;
+        border-style: solid;
+        text-align: center;
+        background-color: white;
+        font-weight: bold;
+        box-shadow: 1px 1px 10px 1px #888888;
+        margin-top: 50px; /* Add margin to the top */
+        height: fit-content;
+    }
+
+    #previousrepair {
+        max-width: 400px; /* Set a max width for the form */
+        margin: 0 auto; /* Center the form horizontally */
+        padding: 15px;
+        border-radius: 25px;
+        border-style: solid 2px #000;
+        text-align: center;
+        background-color: rgb(203, 99, 99);
+        font-weight: bold;
+        font-size: small;
+        box-shadow: 1px 1px 10px 1px #888888;
+        margin-top: 50px; /* Add margin to the top */
+        height: fit-content;
+        color: white;
+    }
+
+    #return {
+        
+        text-decoration: none;
+        font-size: x-large;
+        padding: 15px;
+        margin-top: 10px;
+        font-weight: bolder;
+        text-align: center;
+        
+        
+    }
+
+    #return:hover {
+        
+        text-decoration: none;
+        padding: 15px;
+        margin-top: 10px;
+        font-weight: bolder;
+        
+    }
+    
+    #contianer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+  
+    button {
+        margin-top: 10px; /* Add margin to the top of the button */
+        font-weight: bolder;
+        background-color: rgb(91, 107, 232);
+        width: 60%;
+        border-radius: 25px;
+        color: white;
+    }
+
+    button:hover {
+        margin-top: 10px; /* Add margin to the top of the button */
+        font-weight: bolder;
+        background-color: rgb(59, 79, 232);
+        width: 60%;
+        border-radius: 25px;
+        color: white;
+        border-color: #2c06ff;
+        box-shadow: 0 0 5px rgba(44, 6, 255, 0.5);
+    }
+
+    body {
+        background-color: aliceblue;
+        
+    }  
+
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #2c06ff;
+        box-shadow: 0 0 5px rgba(44, 6, 255, 0.5);
+    }
+
+</style>
+
+<div class="lp-entry-form">
+    <form method="post">
+        <h2>LP Entry</h2>
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="lp">Enter LP:</label>
+            <input type="text" name="lp" id="lp" required>
+        </div>
+
+        <button type="submit">Next</button>
+    </form>
+</div>
+{% if previous_repairs %}
+<div id="contianer">
+<div id="previousrepair">
+    <h5>Error: Previously repaired {{ lp }}:</h5>
+    <ul>
+        {% for repair in previous_repairs %}
+            <li>
+                Date: {{ repair.date }} - {{ repair.time }}
+                SKU: {{ repair.sku }}
+                Repair: {{ repair.repair }}
+                Repaired by: {{ repair.user.first_name }} {{ repair.user.last_name }}
+            </li>
+            
+        </ul>
+    </div>
+    <a id="return" href="{% url 'MDlogger:associate_home' %}"><b>Return</b></a>
+</div>
+{% endfor %}
+{% endif %}
+
+
+{% endblock %}

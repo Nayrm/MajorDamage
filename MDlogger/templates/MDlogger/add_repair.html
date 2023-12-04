@@ -1,0 +1,102 @@
+{% extends 'MDlogger/base.html' %}
+
+{% block content %}
+<style>
+    /* Additional styles for the Add Repair form */
+    .add-repair-form {
+        display: flex;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    #form-container {
+        flex: 1;
+        max-width: 600px;
+        margin-right: 20px;
+        
+    }
+
+    #iframe-container {
+        flex: 1;
+        border: 2px solid #000;
+        box-shadow: 1px 1px 10px #888888;
+        
+    }
+
+    .repair-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 25px;
+        border: 2px solid #000; /* Black border */
+        background-color: white;
+        box-shadow: 1px 1px 10px #888888;
+        margin-top: 50px;
+        height: fit-content;
+    }
+
+    button {
+        margin-top: 10px;
+        font-weight: bolder;
+        background-color: rgb(59, 79, 232);
+        width: 100%;
+        border-radius: 25px;
+        color: white;
+        padding: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: rgb(59, 79, 232);
+        border-radius: 25px;
+        color: white;
+        border-color: #2c06ff;
+        box-shadow: 0 0 5px rgba(44, 6, 255, 0.5);
+
+    }
+
+  body {
+        background-color: #f2f2f2;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #2c06ff;
+        box-shadow: 0 0 5px rgba(44, 6, 255, 0.5);
+    }
+</style>
+
+<div class="add-repair-form">
+    <div id="form-container">
+        <div class="repair-form">
+            <h2>Add Repair</h2>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="sku" value="{{ sku }}">
+                <input type="hidden" name="lp" value="{{ lp }}">
+                <div class="form-group">
+                    <label for="repair">Repair:</label>
+                    {{ form.repair }}
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="iframe-container">
+        <iframe src="https://product-imaging.intra.cityfurniture.io/products/skuinformation/{{ sku }}" width="100%" height="500px"></iframe>
+    </div>
+</div>
+
+{% endblock %}
