@@ -8,7 +8,7 @@
         margin: 0 auto; /* Center the form horizontally */
         padding: 35px;
         border-radius: 25px;
-        border-style: solid;
+        border: solid #20a2e3;
         text-align: center;
         background-color: white;
         font-weight: bold;
@@ -108,9 +108,16 @@
         font-size: 2em; /* Adjust the icon size as needed */
     }
 
+    #home-label {
+        text-align: center;
+        margin-top: 50px;
+        font-size: 3em;
+        font-weight: bold;
+    }
+
 </style>
   
-<h3>Logged in as {{ user.username }}</h3>
+
 <div id="home-container">
     <div class="home-box" onclick="location.href='{% url 'MDlogger:associate_home' %}'">
         <!-- Bootstrap icon for tools -->
