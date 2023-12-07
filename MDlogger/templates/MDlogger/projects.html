@@ -1,0 +1,182 @@
+{% extends 'MDlogger/base.html' %}
+{% block content %}
+
+<style>
+      #container {
+        margin-top: 80px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around
+        
+    }
+
+      #table-container {
+        
+        width: 100%;
+        
+    
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        margin-right: 350px;
+        border: 2px solid black ;
+        box-shadow: 1px 1px 10px #888888;
+        
+        
+        
+    }
+
+
+    th {
+        background-color: #5b6be8;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        text-align: left;
+        border: 1px solid black;
+    }
+
+    th a {
+        text-decoration: none;
+        color: white;
+    }
+
+     td {
+        border: 1px solid darkgray;
+        padding: 8px;
+        text-align: left;
+        max-height: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: wrap;
+    
+    }
+
+    tr:nth-child(even) {
+   background-color: #c4cacc;
+
+    }
+
+    tr:nth-child(odd) {
+        background-color: #ffffff;
+}
+.project-form {
+    max-width: 400px;
+    
+    padding: 25px;
+    border-radius: 25px;
+    border-style: solid;
+    text-align: center;
+    background-color: white;
+    font-weight: bold;
+    box-shadow: 1px 1px 10px 1px #888888;
+    height: fit-content;
+    margin-left: 50px; /* Adjust the left margin as needed */
+}
+
+button {
+        display: inline-block;
+        padding: 10px 20px; /* Adjust padding for better appearance */
+        margin-top: 20px;
+        font-weight: bold;
+        background-color: #5b6be8;
+        border: solid 2px black;
+        border-radius: 25px;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: #888888 2px 0px 12px 0px;
+        transition: all 0.4s ease 0s; 
+    }
+
+    button:hover {
+        background-color: #3144d4; /* Darker color on hover */
+        box-shadow: 0 0 15px #2c06ff;
+        border-color: #2c06ff;
+    }
+
+    body {
+        background-color: aliceblue;
+        overflow: auto;
+    }  
+
+    input {
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #2c06ff;
+        box-shadow: 0 0 10px rgba(44, 6, 255, 0.5);
+    }
+
+    input:hover {
+        background-color: #dfdfdf;
+    }
+
+    #id_description {
+        height: 80px;  /* Adjust the height as needed */
+    }
+</style>
+{% if user.is_authenticated %}
+    <div id="container">
+    <div id="table-container">
+        <table id="projects-table">
+            <tr>
+                <th>Date</th>
+                <th>Project Name</th>
+                <th>Department</th>
+                <th>Due By</th>
+                <th>Assigned To</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.date|date:"m/d/Y" }}</td>
+                    <td>{{ project.project }}</td>
+                    <td>{{ project.department }}</td>
+                    <td>{{ project.due|date:"m/d/Y" }}</td>
+                    <td>{{ project.assignedto }}</td>
+                    <td>{{ project.description }}</td>
+                    <td>{{ project.status }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+    
+    <form method="post" action="" class="project-form">
+        {% csrf_token %}
+        <label for="id_project">Project Name:</label><br>
+        {{ form.project }} <br><br>
+        <label for="id_department">Department:</label><br>
+        {{ form.department }} <br><br>
+        <label for="id_due">Due By:</label><br>
+        <input type="date" id="id_due" name="due" required><br><br>
+        <label for="id_assignedto">Assign To:</label><br>
+        {{ form.assignedto }} <br><br>
+        <label for="id_description" id="text-box">Project Description:</label><br>
+        {{ form.description }} <br><br>
+        <input type="hidden" name="status" value="Incomplete">
+        <button type="submit">Create Project</button>
+    </form>
+
+    </div>
+{% else %}
+    <p>You are not logged in.</p>
+    <a href="{% url 'MDlogger/index.html' %}">Log In</a>
+{% endif %}
+{% endblock %}

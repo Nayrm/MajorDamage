@@ -1,0 +1,179 @@
+{% extends 'MDlogger/base.html' %}
+{% block content %}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border: 2px solid black;
+        box-shadow: 1px 1px 10px #888888;
+        margin-top: 15px;
+    }
+
+    th {
+        background-color: #5b6be8;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        text-align: left;
+        border: 1px solid black;
+    }
+
+    td {
+        border: 1px solid darkgray;
+        padding: 1px;
+        text-align: center;
+        
+    }
+
+    tr:nth-child(even) {
+        background-color: #e8edee;
+
+    }
+
+    tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+    input {
+        width: 80px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-left: 10px;
+        margin: 4px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    #color-button {
+        background-color: #5b6be8;
+        width: 150px;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        text-align: center;
+        border: 2px solid black;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease 0s;
+        margin: 15px;
+        box-shadow: 2px 1px 15px #888888;
+    }
+
+    #color-button:hover {
+        background-color: #3144d4;
+        border-radius: 25px;
+        color: white;
+        border-color: #2c06ff;
+        box-shadow: 0 0 15px #2c06ff;
+    }
+
+    .pieces-per-hour-green {
+        background-color: #a0f0a0 !important; /* Green background color */
+    }
+
+    .pieces-per-hour-red {
+        background-color: #f0a0a0 !important; /* Red background color */
+    }
+
+    .small-font {
+    font-size: 13px; /* Adjust the font size as needed */
+    font-weight: bold;
+    }
+</style>
+
+<h2 id="dashboard-heading">Daily Production Dashboard - <span id="current-date"></span></h2>
+
+<div id="table-container">
+    <table id="dashboard-table">
+        <thead>
+            <tr>
+                <th>Time Range</th>
+                <th>Pieces Repaired</th>
+                <th>Repair Techs</th>
+                <th>Pieces Per Hour</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in dashboard_df.values %}
+            <tr>
+                <td class="small-font">{{ entry.0 }}</td>
+                <td class="small-font"><input type="number" value="{{ entry.1 }}" disabled></td>
+                <td class="small-font"><input type="number" value="0" id="repair-techs-{{ forloop.counter }}" onblur="updatePiecesPerHour({{ forloop.counter }})"></td>
+                <td class="small-font"><input type="text" disabled id="pieces-per-hour-{{ forloop.counter }}"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button id="color-button" onclick="updateRows()">Update</button>
+</div>
+
+
+<script>
+    function updatePiecesPerHour(rowNumber) {
+        var piecesRepaired = parseInt(document.getElementById('dashboard-table').getElementsByTagName('tbody')[0].getElementsByTagName('tr')[rowNumber - 1].getElementsByTagName('td')[1].getElementsByTagName('input')[0].value);
+        var repairTechs = parseInt(document.getElementById('repair-techs-' + rowNumber).value);
+
+        // Calculate pieces per hour and update the corresponding input field
+        var piecesPerHour = piecesRepaired / repairTechs;
+        document.getElementById('pieces-per-hour-' + rowNumber).value = isNaN(piecesPerHour) ? '' : piecesPerHour.toFixed(2);
+    }
+
+    function updateRows() {
+    var table = document.getElementById('dashboard-table');
+    var rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+    // Initialize totals
+    var totalPiecesRepaired = 0;
+    var totalRepairTechs = 0;
+
+    for (var i = 0; i < rows.length; i++) {
+        var piecesRepaired = parseInt(rows[i].getElementsByTagName('td')[1].getElementsByTagName('input')[0].value);
+        var repairTechs = parseInt(rows[i].getElementsByTagName('td')[2].getElementsByTagName('input')[0].value);
+
+        // Update totals
+        totalPiecesRepaired += isNaN(piecesRepaired) ? 0 : piecesRepaired;
+        totalRepairTechs += isNaN(repairTechs) ? 0 : repairTechs;
+
+        var piecesPerHour = piecesRepaired / repairTechs;
+        document.getElementById('pieces-per-hour-' + (i + 1)).value = isNaN(piecesPerHour) ? '' : piecesPerHour.toFixed(2);
+    }
+
+    // Update the total row
+    var totalRow = rows[rows.length - 1];
+    totalRow.getElementsByTagName('td')[1].innerText = totalPiecesRepaired;
+    totalRow.getElementsByTagName('td')[2].innerText = totalRepairTechs;
+
+    // Calculate and update pieces per hour in the total row
+    var totalPiecesPerHour = totalPiecesRepaired / totalRepairTechs;
+    totalRow.getElementsByTagName('td')[3].innerText = isNaN(totalPiecesPerHour) ? '' : totalPiecesPerHour.toFixed(2);
+
+    // Update the styling based on the pieces per hour in the total row
+    if (!isNaN(totalPiecesPerHour) && totalPiecesPerHour >= 2) {
+        totalRow.classList.add('pieces-per-hour-green');
+        totalRow.classList.remove('pieces-per-hour-red');
+    } else if (!isNaN(totalPiecesPerHour) && totalPiecesPerHour < 2) {
+        totalRow.classList.add('pieces-per-hour-red');
+        totalRow.classList.remove('pieces-per-hour-green');
+    } else {
+        totalRow.classList.remove('pieces-per-hour-green', 'pieces-per-hour-red');
+    }
+}
+
+    function updateCurrentDate() {
+        var currentDateElement = document.getElementById('current-date');
+        var today = new Date();
+
+        // Format the date as "MM/DD/YYYY" (you can customize the format as needed)
+        var formattedDate = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
+
+        currentDateElement.textContent = formattedDate;
+    }
+
+    // Call the function to update the current date when the page loads
+    updateCurrentDate();
+</script>
+
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends 'MDlogger/base.html' %}
+{% block content %}
+<style>
+     table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border: 2px solid black ;
+        box-shadow: 1px 1px 10px #888888;
+        margin-top: 15px;
+        
+    }
+
+    
+
+    th {
+        background-color: #5b6be8;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        text-align: left;
+        border: 1px solid black;
+    }
+
+    th a {
+        text-decoration: none;
+        color: white;
+    }
+
+     td {
+        border: 1px solid darkgray;
+        padding: 8px;
+        text-align: left;
+    
+    }
+
+    tr:nth-child(even) {
+   background-color: #c4cacc;
+
+    }
+
+    tr:nth-child(odd) {
+        background-color: #ffffff;
+}
+
+input {
+        width: 160px;
+        padding: 10px;
+        margin: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #2c06ff;
+        box-shadow: 0 0 5px rgba(44, 6, 255, 0.5);
+    }
+
+#file-input {
+    display: none;
+}
+
+#export-button {
+        /* Your existing styles for the button */
+        background: url('/static/MajorDamage/excelicon.png') center center no-repeat;/* Add the path to your image */
+        background-size: cover;
+        width: 70px; /* Adjust the width and height based on your image dimensions */
+        height: 40px;
+        cursor: pointer;
+        float: right;
+        margin: 15px;
+        border-radius: 25px;
+        transition: all 0.3s ease 0s;
+    }
+
+#export-button:hover {
+    background-color: #6ffcc1;
+    border-radius: 25px;
+    color: white;
+    border-color: #00ea4e;
+    box-shadow: 0 0 15px #6ffcc1;
+}
+
+#filter-button {
+    background-color: #5b6be8;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+    border: 2px solid black;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    margin: 15px;
+    box-shadow: 2px 1px 15px #888888;
+   
+}
+
+#filter-button:hover {
+    background-color: #3144d4;
+    border-radius: 25px;
+    color: white;
+    border-color: #2c06ff;
+    box-shadow: 0 0 15px #2c06ff;
+}
+
+
+</style>
+
+
+
+
+<h1>Repaired Data</h1>
+
+<div id="filter-container">
+    <div>
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date">
+
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date">
+
+        
+
+        <button id="filter-button" onclick="applyFilters()">Apply Filter <i class="fas fa-filter"></i></button>
+    </div>
+</div>
+
+<div id="table-container">
+    <div id="export-button" onclick="exportToExcel()"></div>
+
+    <table id="repairs-table">
+        <thead>
+            <tr>
+                <th><a href="?sort=date">Date</a></th>
+                <th><a href="?sort=time">Time</a></th>
+                <th><a href="?sort=last_name">Associate Name</a></th>
+                <th><a href="?sort=username">Associate ID</a></th>
+                <th><a href="?sort=lp">LP</a></th>
+                <th><a href="?sort=sku">SKU</a></th>
+                <th><a href="?sort=repair">Repair</a></th>
+            </tr>
+        </thead>
+        <tbody id="scrollable-body">
+            {% for repair in repairs %}
+            <tr>
+                <td>{{ repair.date|date:"m/d/y" }}</td>
+                <td>{{ repair.time }}</td>
+                <td>{{ repair.user.first_name }} {{ repair.user.last_name }}</td>
+                <td>{{ repair.user.username }}</td>
+                <td>{{ repair.lp }}</td>
+                <td><a href="https://product-imaging.intra.cityfurniture.io/products/skuinformation/{{ repair.sku }}" target="_blank">{{ repair.sku }}</a></td>
+                <td>{{ repair.repair }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+</div>
+<div class="pagination">
+    <span class="step-links">
+        {% if repairs.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ repairs.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ repairs.number }} of {{ repairs.paginator.num_pages }}.
+        </span>
+
+        {% if repairs.has_next %}
+            <a href="?page={{ repairs.next_page_number }}">next</a>
+            <a href="?page={{ repairs.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+<script>
+     function applyFilters() {
+    var startDate = document.getElementById("start_date").value;
+    var endDate = document.getElementById("end_date").value;
+
+    var url = window.location.href.split('?')[0];
+    var params = new URLSearchParams(window.location.search);
+
+    if (startDate) {
+      params.set('start_date', startDate);
+    } else {
+      params.delete('start_date');
+    }
+
+    if (endDate) {
+      params.set('end_date', endDate);
+    } else {
+      params.delete('end_date');
+    }
+
+    window.location.href = url + '?' + params.toString();
+  }
+
+  function exportToExcel() {
+    var url = window.location.href.split('?')[0];
+    var params = new URLSearchParams(window.location.search);
+
+    params.set('export_to_excel', 'true');
+
+    window.location.href = url + '?' + params.toString();
+  }
+</script>
+{% endblock %}

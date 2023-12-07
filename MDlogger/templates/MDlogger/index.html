@@ -18,25 +18,27 @@
     }
 
     button {
-        margin-top: 10px; /* Add margin to the top of the button */
-        font-weight: bolder;
-        background-color: rgb(59, 79, 232);
-        width: 60%;
+        display: inline-block;
+        padding: 10px 70px; /* Adjust padding for better appearance */
+        margin-top: 20px;
+        font-weight: bold;
+        background-color: #5b6be8;
+        border: solid 2px black;
         border-radius: 25px;
         color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
         cursor: pointer;
+        box-shadow: #888888 2px 0px 12px 0px;
+        transition: all 0.4s ease 0s; 
     }
 
     button:hover {
-        margin-top: 10px; /* Add margin to the top of the button */
-        font-weight: bolder;
-        background-color: rgb(59, 79, 232);
-        width: 60%;
-        border-radius: 25px;
-        color: white;
+        background-color: #3144d4; /* Darker color on hover */
+        box-shadow: 0 0 15px #2c06ff;
         border-color: #2c06ff;
-        box-shadow: 0 0 5px rgba(44, 6, 255, 0.5);
-        cursor: pointer;
     }
 
     body {
@@ -60,8 +62,82 @@
 
 </style>
 {% if user.is_authenticated %}
-    <h3>Logged in as {{ user.username}}</h3>
+<style>
+    /* Additional styles for the home page */
+    #home-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        max-width: 1200px; /* Set a maximum width for the container */
+        margin: 0 auto; /* Center the container */
+        margin-top: 50px;
+        padding-top: 50px;
+    }
+
+    .home-box {
+        width: 30%;
+        height: 250px;
+        margin: 10px;
+        padding: 15px;
+        padding-top: 70px;
+        border: 2px solid #20a2e3;
+        
+        border-radius: 15px;
+        text-align: center;
+        font-weight: bold;
+        font-size: larger;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+        box-shadow: 1px 1px 6px 1px #b8b8b8;
+        
+       
+        align-items: center;
     
+    }
+
+    .home-box:hover {
+        background-color: #20a2e3;
+        color: white;
+    }
+
+    .box-icon {
+        
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2em; /* Adjust the icon size as needed */
+    }
+
+</style>
+  
+<h3>Logged in as {{ user.username }}</h3>
+<div id="home-container">
+    <div class="home-box" onclick="location.href='{% url 'MDlogger:associate_home' %}'">
+        <!-- Bootstrap icon for tools -->
+        <i class="box-icon bi bi-hammer"></i>
+        <h3>My Repairs</h3>
+    </div>
+    <div class="home-box" onclick="location.href='{% url 'MDlogger:projects' %}'">
+        <i class="box-icon bi bi-clipboard2-fill"></i>
+        <h3>Projects</h3>
+    </div>
+    <div class="home-box" onclick="location.href='{% url 'MDlogger:data' %}'">
+        <i class="box-icon bi bi-database-fill"></i>
+        <h3>Repaired Data</h3>
+    </div>
+    <div class="home-box" onclick="location.href='{% url 'MDlogger:dashboard' %}'">
+        <i class="box-icon bi bi-tv-fill"></i>
+        <h3>Dashboard</h3>
+    </div>
+    <div class="home-box" onclick="location.href='{% url 'MDlogger:metrics' %}'">
+        <i class="box-icon bi bi-graph-up-arrow"></i>
+        <h3>Metrics</h3>
+    </div>
+    <div class="home-box" onclick="location.href='{% url 'admin:index' %}'">
+        <i class="box-icon bi bi-diagram-3-fill"></i>
+        <h3>Administration</h3>
+    </div>
+</div>
 {% else %}
 <div class="login-form">
     <form method="post">

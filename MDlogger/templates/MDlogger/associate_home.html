@@ -26,18 +26,17 @@
         display: inline-block;
         font-size: 16px;
         cursor: pointer;
-        box-shadow: #888888 2px 0px 12px 0px; 
+        box-shadow: #888888 2px 0px 12px 0px;
+        transition: all 0.4s ease 0s; 
     }
 
     #addrepair:hover {
-        background-color: rgb(49, 69, 212); /* Darker color on hover */
-        box-shadow: 0 0 5px rgba(44, 6, 255, 0.5);
+        background-color: #3144d4; /* Darker color on hover */
+        box-shadow: 0 0 15px #2c06ff;
         border-color: #2c06ff;
     }
 
     .repaircontainer {
-       
-        background-color: #1d2a47;
         width:30%;
         max-width: 320px;        position: fixed;
         top: 68px; /* Adjust this value based on your navbar height */
@@ -61,9 +60,6 @@
     .repaircontainer.active {
         left: 0;
     }
-
-
-
 
     .repaired-box {
         border: 2px solid #1b1919;
@@ -126,15 +122,13 @@
         border: solid 2px #1e2026;
     }
 
-
-    .quecontainer {
-       
-       background-color: #1d2a47;
+    .projects-container {
        width:30%;
-       max-width: 320px;        position: fixed;
+       max-width: 320px;        
+       position: fixed;
        top: 68px; /* Adjust this value based on your navbar height */
        right: -30%;
-       transition: right 1.3s ease;
+       transition: right 1.4s ease;
        background-color: #dce0e8;
        height: 90%;
        bottom: 10px;
@@ -150,22 +144,59 @@
        padding-top: 10px;
    }
 
-   .quecontainer.active{
+   .projects-container.active{
          right: 0;
    }
 
-   #current-que {
+   #current-projects {
         text-align: center;
         font-weight: bold;
         color: black;
         margin-bottom: 10px;
     }
 
-    .queue-box-container {
+    .projects-box-container {
         overflow-y: scroll;
         height: 82%;
     }
 
+    .projects-box {
+        border: 2px solid #1b1919;
+        border-radius: 10px;
+        margin: 0 auto 20px;
+        padding: 15px;
+        margin-top: 30px;
+        background-color: #38bb82;
+        width: 80%;
+        box-shadow: 2px 2px 13px 1px #888888;
+        font-weight: bold;
+        font-size: medium;
+        color: white;
+    }
+
+    #markcomplete {
+        display: inline-block;
+        padding: 10px 20px; /* Adjust padding for better appearance */
+        margin-top: 20px;
+        font-weight: bold;
+        background-color: #5b6be8;
+        border: solid 2px black;
+        border-radius: 25px;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: #585858 2px 0px 12px 0px;
+        transition: all 0.4s ease 0s; 
+    }
+
+    #markcomplete:hover {
+        background-color: #3144d4; /* Darker color on hover */
+        box-shadow: 0 0 15px #2c06ff;
+        border-color: #2c06ff;
+    }
 
     
     
@@ -189,7 +220,7 @@
         {% endfor %}
     </div>
 <div id="addrepaircontainer">
-<a id="addrepair" href="{% url 'MDlogger:lp_entry' %}">Add to Queue</a>
+<a id="addrepair" href="{% url 'MDlogger:lp_entry' %}">Add New Repair</a>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -198,10 +229,25 @@
 <canvas id="repairDoughnutChart" width="400" height="400"></canvas>
 </div>
 </div>
-<div class="quecontainer">
-    <h3 id="current-que">Pieces in Queue: </h3>
-    <div class="queue-box-container">
+<div class="projects-container">
+    <h3 id="current-projects">Assigned Projects: </h3>
+    <div class="projects-box-container">
+        {% for project in projects %}
+        <div class="projects-box">
+        <div class = "project-project">Project: {{ project.project }}</div>
+        <div class = "project-date">Assigned: {{ project.date }}</div>
+        <div class = "project-due">Due: {{ project.due }}</div>
+        <div class = "project-department">Department: {{ project.department }}</div>
+        <div class = "project-description">Description: {{ project.description }}</div>
+        <form method="post" action="{% url 'MDlogger:project_complete' project.id %}">
+            {% csrf_token %}
+            <button id="markcomplete" type="submit">Mark as Complete</button>
+        </form>
+        </div>
+        
 
+        {% endfor %}
+        <div class="projects">
 
     </div>
 </div>
@@ -209,17 +255,17 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
         var repairContainer = document.querySelector('.repaircontainer');
-        var queContainer = document.querySelector('.quecontainer');
+        var projectsContainer = document.querySelector('.projects-container');
         function toggleRepairContainer() {
             repairContainer.classList.toggle('active');
         }
 
-        function toggleQueContainer() {
-            queContainer.classList.toggle('active');
+        function toggleprojectsContainer() {
+            projectsContainer.classList.toggle('active');
         }
 
         toggleRepairContainer();
-        toggleQueContainer();
+        toggleprojectsContainer();
     });
 
 
@@ -233,7 +279,7 @@ var doughnutData = {
   labels: ['Repaired', 'Remaining'],
   datasets: [{
     data: [piecesRepaired, piecesLeftToRepair],
-    backgroundColor: ['#2ee696', '#cc5252'],
+    backgroundColor: ['#2ee696', '#2d9cc2'],
   }],
 };
 
