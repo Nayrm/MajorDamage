@@ -26,6 +26,10 @@
 </head>
 <body>
 <style>
+    .body {
+        background-color: aliceblue;
+    }
+
     .navbar {
         box-shadow: 2px 1px 15px #888888;
         padding-left: 20px;
@@ -104,11 +108,11 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Data
+                        Benchstock
                         <div class="pie-chart"></div>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'MDlogger:metrics' %}">Metrics</a>
+                        
                         <a class="dropdown-item" href="{% url 'MDlogger:projects' %}">Projects</a>
                         <a class="dropdown-item" href="{% url 'MDlogger:dashboard' %}">Dashboard</a>
                         <a class="dropdown-item" href="{% url 'MDlogger:data' %}">Repaired Data</a>

@@ -15,7 +15,7 @@
     #addrepair {
         display: inline-block;
         padding: 10px 20px; /* Adjust padding for better appearance */
-        margin-top: 20px;
+        margin-top: 10px;
         font-weight: bold;
         background-color: #5b6be8;
         border: solid 2px black;
@@ -34,6 +34,16 @@
         background-color: #3144d4; /* Darker color on hover */
         box-shadow: 0 0 15px #2c06ff;
         border-color: #2c06ff;
+    }
+
+    #addrepaircontainer {
+        position: absolute; /* Position the container absolutely */
+        bottom: 25px; /* Adjust this value as needed */
+        width: 100%; /* Make it span the entire width of .repaircontainer */
+        border-top: 1px solid #c1c1c1;
+        background-color: ffffff;
+        text-align: center;
+        
     }
 
     .repaircontainer {
@@ -77,39 +87,22 @@
 
     .repaired-box-container {
         overflow-y: scroll;
-        height: 82%;
+        height: calc(100% - 122px);
     }
 
     .repair-lp {
         font-weight: bold;
-       font-size: small;
+       font-size: .8rem;
         color: white;
     }
 
-    .repair-sku {
+    .repair-sku, .repair-repair, .repair-time {
         font-weight: bold;
-        font-size: medium;
+        font-size: 1rem;
         color: white;
     }
 
-    .repair-repair {
-        font-weight: bold;
-        font-size: medium;
-        color: white;
-    }
-
-    .repair-time {
-        font-weight: bold;
-        font-size: medium;
-        color: white;
-    }
-
-    #addrepaircontainer {
-        position: absolute; /* Position the container absolutely */
-        bottom: 25px; /* Adjust this value as needed */
-        width: 100%; /* Make it span the entire width of .repaircontainer */
-        border-top: 1px solid #c1c1c1;
-    }
+ 
 
     #graphs-container {
         width: 70%;

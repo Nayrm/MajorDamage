@@ -11,6 +11,9 @@
         
     }
 
+    body {
+        background-color: aliceblue;
+    }
     
 
     th {
@@ -106,15 +109,8 @@ input {
     border-color: #2c06ff;
     box-shadow: 0 0 15px #2c06ff;
 }
-
-
 </style>
-
-
-
-
 <h1>Repaired Data</h1>
-
 <div id="filter-container">
     <div>
         <label for="start_date">Start Date:</label>
@@ -127,9 +123,14 @@ input {
 
         <button id="filter-button" onclick="applyFilters()">Apply Filter <i class="fas fa-filter"></i></button>
     </div>
+    <div>
+        
+        <p>Showing <strong>{{ repairs_count }}</strong> results from <strong>{{ formatted_start_date }}</strong> to <strong>{{ formatted_end_date }}</strong>.</p>
+    </div>
 </div>
 
 <div id="table-container">
+   
     <div id="export-button" onclick="exportToExcel()"></div>
 
     <table id="repairs-table">

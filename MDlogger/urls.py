@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from . import views
 from django.contrib import admin
-from .views import mark_project_complete
+from .views import data, dashboard, projects, metrics, add_repair, sku_entry, lp_entry, associate_home, logout_request, index, mark_project_complete
 
 app_name = 'MDlogger'
 urlpatterns = [
