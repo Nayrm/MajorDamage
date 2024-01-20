@@ -5,7 +5,6 @@ from ..models import SavedRepair, Projects
 import pandas as pd
 
 def format_time_range(start_time, end_time):
-    # Format the time range in AM/PM format
     formatted_start_time = datetime.strptime(start_time, "%H:%M").strftime("%I:%M %p")
     formatted_end_time = datetime.strptime(end_time, "%H:%M").strftime("%I:%M %p")
     return f"{formatted_start_time} - {formatted_end_time}"
@@ -31,17 +30,13 @@ def dashboard(request):
         {'start': '21:00', 'end': '21:59'},
         {'start': '22:00', 'end': '22:59'},
         {'start': '23:00', 'end': '23:59'},
-        # Add more time ranges as needed
     ]
 
-    # Initialize a list to store data for each time range
     dashboard_data = []
 
     for time_range in time_ranges:
         start_time = time_range['start']
         end_time = time_range['end']
-
-        # Filter SavedRepair objects for the current date and time range
         repairs_in_range = SavedRepair.objects.filter(
             date=current_date,
             time__gte=start_time,
@@ -56,13 +51,11 @@ def dashboard(request):
             'pieces_repaired': pieces_repaired,
         })
 
-    # Append total row to the dashboard_data list
     dashboard_data.append({
         'time_range': 'Total:',
-        'pieces_repaired': 0,  # Placeholder, as it will be updated in JavaScript
+        'pieces_repaired': 0,
     })
 
-    # Update the DataFrame with the total row
     dashboard_df = pd.DataFrame(dashboard_data)
 
     return render(request, 'MDlogger/dashboard.html', {'dashboard_df': dashboard_df})

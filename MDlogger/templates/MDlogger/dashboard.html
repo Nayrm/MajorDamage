@@ -166,13 +166,11 @@
         var currentDateElement = document.getElementById('current-date');
         var today = new Date();
 
-        // Format the date as "MM/DD/YYYY" (you can customize the format as needed)
         var formattedDate = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
 
         currentDateElement.textContent = formattedDate;
     }
 
-    // Call the function to update the current date when the page loads
     updateCurrentDate();
 </script>
 

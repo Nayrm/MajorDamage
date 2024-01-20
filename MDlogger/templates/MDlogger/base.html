@@ -4,16 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}MDlogger{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
-    
+    <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
     
     <script>
         function confirmLogout() {
@@ -24,117 +20,91 @@
     </script>
     
 </head>
-<body>
-<style>
-    .body {
-        background-color: aliceblue;
-    }
+<body style="background-color: aliceblue;">
+    <style>
+        .navbar {
+            box-shadow: 2px 1px 15px #888888;
+            padding-left: 20px;
+        }
 
-    .navbar {
-        box-shadow: 2px 1px 15px #888888;
-        padding-left: 20px;
-    }
+        .nav-link {
+            border-radius: 25px;
+            margin-right: 10px;
+        }
 
-    .nav-link {
-        border-radius: 25px;
-        margin-right: 10px;
-        
-    }
+        .nav-link:hover {
+            font-weight: bold;
+            color: white;
+        }
 
-    .nav-link:hover {
-        border-radius: 25px;
-        font-weight: bold;
-        color: white;
+        .navbar-nav .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+        }
 
-    }
+        .dropdown-menu {
+            border-radius: 6px;
+            background-color: #2d3234ed;
+            box-shadow: 2px 1px 15px #888888;
+        }
 
-    .navbar-nav .nav-item.dropdown:hover .dropdown-menu {
-        display: block;
-    }
+        .dropdown-item {
+            color: #ffffff;
+        }
 
-    .dropdown-menu {
-        border-radius: 6px;
-        background-color: #2d3234ed;
-        box-shadow: 2px 1px 15px #888888;
-    }
+        .dropdown-item:hover {
+            background-color: #20a2e3eb;
+            font-weight: bold;
+            color: white;
+        }
 
-    .dropdown-item {
-        color: #ffffff; /* Text color */
-    }
-
-    .dropdown-item:hover {
-        background-color: #20a2e3eb; /* Hover background color */
-        font-weight: bold;
-        color: white;
-    }
-
-   
-    .pie-chart {
-        width: 1em; /* Adjust the size as needed */
-        height: 1em; /* Adjust the size as needed */
-        border-radius: 50%;
-        border: 1px solid #000000;
-        background: conic-gradient(
-            #f4f72f 0deg 60deg,
-    #ff0000 60deg 210deg,
-    #424bfc 180deg 360deg
-);
-        display: inline-block;
-        margin-left: 5px; /* Adjust the spacing as needed */
-        
-    }
-                
-                
-</style>
+        .pie-chart {
+            width: 1em;
+            height: 1em;
+            border-radius: 50%;
+            border: 1px solid #000000;
+            background: conic-gradient(#f4f72f 0deg 60deg, #ff0000 60deg 210deg, #424bfc 180deg 360deg);
+            display: inline-block;
+            margin-left: 5px;
+        }
+    </style>
+    
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #20a2e3;">
         <a class="navbar-brand text-white" href="{% url 'MDlogger:index' %}"><b>Major Damage System</b></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
             aria-expanded="false" aria-label="Toggle navigation" style="background-color: #45b8f2;">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav ml-auto">
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link text-white" href="#">Welcome, <i><b>{{ user.first_name }}</b></i></a>
-            </li>
-
-
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'MDlogger:index' %}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'MDlogger:associate_home' %}">My Repairs</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Benchstock
-                        <div class="pie-chart"></div>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        
-                        <a class="dropdown-item" href="{% url 'MDlogger:projects' %}">Projects</a>
-                        <a class="dropdown-item" href="{% url 'MDlogger:dashboard' %}">Dashboard</a>
-                        <a class="dropdown-item" href="{% url 'MDlogger:data' %}">Repaired Data</a>
-
-                        
-                    </div>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#" onclick="confirmLogout()">Log out</a>
-                </li>
-                
-                
-               
-
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'MDlogger:index' %}">Login Required</a>
-                </li>
-            {% endif %}
-
-
+            <ul class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">Welcome, <i><b>{{ user.first_name }}</b></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'MDlogger:index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'MDlogger:associate_home' %}">My Repairs</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Benchstock
+                            <div class="pie-chart"></div>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'MDlogger:projects' %}">Projects</a>
+                            <a class="dropdown-item" href="{% url 'MDlogger:dashboard' %}">Dashboard</a>
+                            <a class="dropdown-item" href="{% url 'MDlogger:data' %}">Repaired Data</a>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#" onclick="confirmLogout()">Log out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'MDlogger:index' %}">Login Required</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </nav>

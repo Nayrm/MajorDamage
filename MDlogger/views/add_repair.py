@@ -4,8 +4,6 @@ from datetime import datetime
 from ..models import SavedRepair
 from ..forms import AddRepairForm
 
-    
-
 def add_repair(request):
     lp = request.session.get('lp')
     sku = request.session.get('sku')
@@ -13,7 +11,7 @@ def add_repair(request):
     if lp is None or sku is None:
         return redirect('MDlogger:associate_home')
 
-    form = AddRepairForm()  # Instantiate the form outside the if block
+    form = AddRepairForm() 
 
     if request.method == "POST":
         form = AddRepairForm(request.POST)
